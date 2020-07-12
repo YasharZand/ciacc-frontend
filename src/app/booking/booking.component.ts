@@ -110,11 +110,15 @@ export class BookingComponent implements AfterViewInit {
 
   selectSlot(slot) {
     console.log(slot);
-    this.selectedSlot = slot;
+    if(slot.count)
+    {
+      this.selectedSlot = slot;
+    }    
   }
 
 
   submitSlot() {
+    // var d = new Date(this.selectedSlot.date);
     let request = {username:this.username,date: this.selectedSlot.date};
     this.errorMessage = '';
     this.bookingDatabase!.saveBooking('/bookings', request).subscribe(data => {
@@ -125,6 +129,9 @@ export class BookingComponent implements AfterViewInit {
         this.errorMessage = data.message;
         let query = (this.selectedDate.getMonth() + 1) + '-' + this.selectedDate.getDate() + '-' + this.selectedDate.getFullYear();
         this.getBookings(query);
+      } else
+      {
+        this.router.navigate(['details'],{queryParams: {username: this.username}});
       }
     })
   }

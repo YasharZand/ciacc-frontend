@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { BookingsService } from '../bookings/bookings.service';
 
 @Component({
   selector: 'app-details',
@@ -9,13 +10,14 @@ import { Subscription } from 'rxjs';
 })
 export class DetailsComponent implements OnInit {
   private subscription: Subscription;
-  book: any;
+  bookings;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute,
+    private bookingService: BookingsService,) { }
 
   ngOnInit(): void {
     this.subscription = this.route.queryParams.subscribe(params => {
-      this.updateDetails(params);
+      this.updateDetails(params.username);
     });
   }
 
@@ -23,8 +25,13 @@ export class DetailsComponent implements OnInit {
     this.subscription.unsubscribe();
   }
 
-  updateDetails(book) {
-    this.book = book;
+  updateDetails = (query) => {
+    this.bookingService.getBookings('/bookings/user/' + query).subscribe(data => {
+
+      this.bookings = data;
+      // this.events.push(`${type}: ${this.slots}`);
+      console.log(this.bookings);
+    })
   }
 
 }
