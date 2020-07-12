@@ -8,7 +8,7 @@ const href = 'http://localhost:3000';
   providedIn: 'root'
 })
 export class BookingsService {
-
+  username : string;
   constructor(private http: HttpClient) { }
 
   getBookings(route: string, data?: any): Observable<TimeSlot[]> {
@@ -30,9 +30,27 @@ export class BookingsService {
     // });
   }
 
+  saveBooking(route: string, booking: any): Observable<saveResponse> {
+    const url = href + route;
+    const result = this.http.post<saveResponse>(url, booking);
+    return result;
+  }
+  
+  setUserName = (username : string) =>
+  {
+    this.username = username;
+  }
+
 }
 
 export interface TimeSlot {
   count: number;
   date: Date;
+}
+
+export interface saveResponse {
+  username: string;
+  date: Date;
+  status?: number;
+  message?: string;
 }

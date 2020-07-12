@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookingsService } from '../bookings/bookings.service';
 import { Subscription } from 'rxjs';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { HttpClient } from '@angular/common/http';
 import { merge, Observable, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-booking',
@@ -15,34 +15,46 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 export class BookingComponent implements AfterViewInit {
   private subscription: Subscription;
 
-  displayedColumns: string[] = ['date', 'name'];
-  exampleDatabase: BookingsService | null;
+  bookingDatabase: BookingsService | null;
+  minDate: Date;
+  maxDate: Date;
+  selectedDate: Date;
+  selectedSlot;
+  username: string;
+  errorMessage: string = '';
   // data: GithubIssue[] = [];
   slots: Object = [];
-  resultsLength = 0;
+  // resultsLength = 0;
   isLoadingResults = false;
   noDateSelected = true;
 
+  @ViewChild(MatButtonToggleGroup) group: MatButtonToggleGroup;
+  @ViewChildren(MatButtonToggle) toggles: QueryList<MatButtonToggle>;
   // @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort) sort: MatSort;
-  events: string[] = [];
+  // events: string[] = [];
 
   constructor(private route: ActivatedRoute,
     private router: Router,
     private bookingService: BookingsService,
     private _httpClient: HttpClient) {
+    const currentYear = new Date().getFullYear();
+    this.minDate = new Date();
+    this.maxDate = new Date();
+    this.maxDate.setDate(this.maxDate.getDate() + 3 * 7);
     // this.onSelect(this.selectedDate);
   }
 
   ngAfterViewInit(): void {
-    // this.exampleDatabase = new BookingsService(this._httpClient);
+    this.bookingDatabase = new BookingsService(this._httpClient);
+    
     // merge(this.paginator.page)
     //   .pipe(
     //     startWith({}),
     //     switchMap(() => {
     //       this.isLoadingResults = true;
-    //       return this.exampleDatabase!.getBookings('/bookings');
-    //       // return this.exampleDatabase!.getRepoIssues(
+    //       return this.bookingDatabase!.getBookings('/bookings');
+    //       // return this.bookingDatabase!.getRepoIssues(
     //       //   this.sort.active, this.paginator.pageIndex);
     //     }),
     //     map(data => {
@@ -63,34 +75,58 @@ export class BookingComponent implements AfterViewInit {
     // this.subscription = this.route.queryParams.subscribe(params => {
     //   this.searchBooks(params['query']);
     // });
+
+    this.subscription = this.route.queryParams.subscribe(params => {
+      this.username = params["username"];
+    })
   }
 
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+     this.subscription.unsubscribe();
   }
 
-  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+  selectDate(type: string, event: MatDatepickerInputEvent<Date>) {
+    console.log(this.bookingDatabase.username);
     this.isLoadingResults = true;
     this.noDateSelected = true;
-    let g = new Date(event.value);
-    let query = g.getDate() + '-' + (g.getMonth() + 1) + '-' + g.getFullYear();
-    //console.log(g.getDate()+'-'+(g.getMonth() + 1)+'-'+g.getFullYear());
-    //this.events.push(`${type}: ${g.getDate()+'-'+(g.getMonth() + 1)+'-'+g.getFullYear()}`);
-    this.bookingService!.getBookings('/bookings/' + query).subscribe(data => {
+    this.selectedDate = new Date(event.value);
+    let query = (this.selectedDate.getMonth() + 1) + '-' + this.selectedDate.getDate() + '-' + this.selectedDate.getFullYear();
+    this.getBookings(query);    
+  }
+
+  getBookings = (query) => {
+    this.bookingDatabase!.getBookings('/bookings/' + query).subscribe(data => {
       this.isLoadingResults = false;
       this.noDateSelected = false;
       this.slots = data;
+      setTimeout(() => {
+        this.toggles.forEach(toggle => toggle.buttonToggleGroup = this.group);
+      });
       // this.events.push(`${type}: ${this.slots}`);
       console.log(this.slots);
     })
   }
 
+  selectSlot(slot) {
+    console.log(slot);
+    this.selectedSlot = slot;
+  }
 
-  async searchBooks(query: string) {
-    // const results = await this.bookingService.searchBooks(query);
 
-    // this.bookings.data = results.docs;
+  submitSlot() {
+    let request = {username:this.username,date: this.selectedSlot.date};
+    this.errorMessage = '';
+    this.bookingDatabase!.saveBooking('/bookings', request).subscribe(data => {
+      this.isLoadingResults = false;
+      this.noDateSelected = false;
+      if(data.status && data.status == 400)
+      {
+        this.errorMessage = data.message;
+        let query = (this.selectedDate.getMonth() + 1) + '-' + this.selectedDate.getDate() + '-' + this.selectedDate.getFullYear();
+        this.getBookings(query);
+      }
+    })
   }
 
   // viewDetails(book) {
@@ -103,10 +139,11 @@ export class BookingComponent implements AfterViewInit {
   //   }});
   // }
 
-  myDateFilter = (d: Date): boolean => {
-    const day = d.getDay();
-    // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6;
+
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Sunday from being selected.
+    return day !== 0;
   }
 
 }

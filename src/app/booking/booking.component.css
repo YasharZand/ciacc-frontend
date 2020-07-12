@@ -4,12 +4,21 @@
     border: 1px solid #555;
     overflow: auto;
   }
+
+  .example-card {
+    width: 100%;
+    text-align:center;
+  }
+
+  btn-add {
+    color: #980000;
+  }
   
 .example-container {
     position: relative;
     min-height: 200px;
   }
-  
+
   .example-table-container {
     position: relative;
     max-height: 400px;

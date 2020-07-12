@@ -1,37 +1,40 @@
 <!-- <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center"> -->
 <mat-card class="example-card">
   <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
+    <!-- <div mat-card-avatar class="example-header-image"></div> -->
     <mat-card-title>Pochung Center</mat-card-title>
     <mat-card-subtitle>Inspection Appointment</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div>
-      <mat-form-field appearance="fill">
-        <mat-label>Set Inspection Date</mat-label>
-        <input matInput [matDatepicker]="picker" (dateChange)="addEvent('change', $event)">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <div class="example-container mat-elevation-z8">
-        <div class="example-loading-shade" *ngIf="isLoadingResults || noDateSelected">
-          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-          <div class="example-rate-limit-reached" *ngIf="noDateSelected">
-           Please Select a date to view the available timeslots.
-          </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Set Inspection Date</mat-label>
+      <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="myFilter" [matDatepicker]="picker"
+        (dateChange)="selectDate('change', $event)">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <div class="example-rate-limit-reached" *ngIf="errorMessage != ''">
+      {{errorMessage}}
+    </div>
+    <div class="example-container mat-elevation-z8">
+      <div class="example-loading-shade" *ngIf="isLoadingResults || noDateSelected">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        <div class="example-rate-limit-reached" *ngIf="noDateSelected">
+          Please Select a date to view the available timeslots.
         </div>
-        <mat-grid-list cols="6" rowHeight="3:1">
-          <mat-grid-tile *ngFor="let slot of slots"><button
-              mat-raised-button>{{slot.date | date : 'shortTime'}}</button></mat-grid-tile>
-        </mat-grid-list>
       </div>
+      
+      <mat-grid-list cols="6" rowHeight="3:1">
+        <mat-grid-tile *ngFor="let slot of slots">
+          <mat-button-toggle (click)="selectSlot(slot)" mat-raised-button>{{slot.date | date : 'shortTime'}}
+          </mat-button-toggle>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style"></mat-button-toggle-group>
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>Set Appointment</button>
+    <button mat-button [disabled]="!selectedSlot" (click)="submitSlot()">Set Appointment</button>
     <button mat-button>Back</button>
   </mat-card-actions>
 </mat-card>
-
-
-<!-- </div> -->

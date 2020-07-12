@@ -1,7 +1,9 @@
 
 # About
 
-The frontend to the Carsome Code challenge which still needs development
+The frontend to the Carsome Code challenge.
+You can find the backend at [Carsome Bachend](https://github.com/YasharZand/ciacc-backend).
+You register your email, find a date and set an appointment. 
 # CiaccFrontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.11.

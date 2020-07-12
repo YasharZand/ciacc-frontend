@@ -23,8 +23,8 @@ export class AppComponent {
     });
   }
 
-  onSearch() {
-    if (!this.searchForm.valid) return;
-    this.router.navigate(['search'], { queryParams: {query: this.searchForm.get('search').value}});
-  }
+  // onSearch() {
+  //   if (!this.searchForm.valid) return;
+  //   this.router.navigate(['search'], { queryParams: {query: this.searchForm.get('search').value}});
+  // }
 }
