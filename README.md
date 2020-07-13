@@ -2,8 +2,9 @@
 # About
 
 The frontend to the Carsome Code challenge.
-You can find the backend at [Carsome Bachend](https://github.com/YasharZand/ciacc-backend).
+You can find the backend at [Carsome Backend](https://github.com/YasharZand/ciacc-backend).
 You register your email, find a date and set an appointment. 
+You can change the api backend location at /common/global-constants.ts
 # CiaccFrontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.11.

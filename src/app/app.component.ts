@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
+import { GlobalConstants } from './common/global-constants';
 
-// import { BooksService } from './books/books.service';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +10,15 @@ import { Router } from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Booking';
   searchForm: FormGroup;
+  isRegistered: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router) {
+    private router: Router) {
+      if (GlobalConstants.username != '')
+      {
+        this.isRegistered = true;
+      }
   }
 
   ngOnInit() {

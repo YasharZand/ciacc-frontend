@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { merge, Observable, of as observableOf } from 'rxjs';
+import{ GlobalConstants } from'../common/global-constants';
 
-const href = 'http://localhost:3000';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class BookingsService {
   constructor(private http: HttpClient) { }
 
   getBookings(route: string, data?: any): Observable<TimeSlot[]> {
-    const url = href + route;
+    const url = GlobalConstants.apiURL + route;
     let params = new HttpParams();
 
     if (data !== undefined) {
@@ -31,7 +31,7 @@ export class BookingsService {
   }
 
   saveBooking(route: string, booking: any): Observable<saveResponse> {
-    const url = href + route;
+    const url = GlobalConstants.apiURL + route;
     const result = this.http.post<saveResponse>(url, booking);
     return result;
   }

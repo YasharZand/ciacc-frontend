@@ -8,7 +8,7 @@
     </mat-card-header>
     <mat-card-content>
       <p>
-        please input your username proceed to booking.
+        please register your username to proceed to booking.
       </p>
       <form class="example-form">
         <mat-form-field class="example-full-width">
@@ -26,7 +26,7 @@
 
     </mat-card-content>
     <mat-card-actions>
-        <button mat-button [disabled]="!this.emailFormControl.valid" (click)="saveUser()">Save User</button>
+        <button mat-button [disabled]="!this.emailFormControl.valid" (click)="saveUser()">Register User</button>
         <button mat-button [disabled]="!isUserSaved" (click)="proceedBooking()">Proceed Booking</button>
       </mat-card-actions>
   </mat-card>

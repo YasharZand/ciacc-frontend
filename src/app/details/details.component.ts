@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BookingsService } from '../bookings/bookings.service';
+import { GlobalConstants } from '../common/global-constants';
 
 @Component({
   selector: 'app-details',
@@ -13,12 +14,17 @@ export class DetailsComponent implements OnInit {
   bookings;
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private bookingService: BookingsService,) { }
 
   ngOnInit(): void {
     this.subscription = this.route.queryParams.subscribe(params => {
       this.updateDetails(params.username);
     });
+    if (GlobalConstants.username == '')
+    {
+      this.router.navigate(['']);
+    }
   }
 
   ngOnDestroy() {
