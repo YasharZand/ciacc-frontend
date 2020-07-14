@@ -39,6 +39,16 @@ export class BookingsService {
   setUserName = (username : string) =>
   {
     this.username = username;
+    localStorage.setItem('user', JSON.stringify(this.username));
+  }
+
+  getUserName = () => {
+    return JSON.parse(localStorage.getItem('user'));
+  }
+
+  removeUser = () =>
+  {
+    localStorage.removeItem('user');
   }
 
 }

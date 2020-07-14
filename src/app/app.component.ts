@@ -11,14 +11,10 @@ import { GlobalConstants } from './common/global-constants';
 })
 export class AppComponent {
   searchForm: FormGroup;
-  isRegistered: boolean = false;
+  // isRegistered: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private router: Router) {
-      if (GlobalConstants.username != '')
-      {
-        this.isRegistered = true;
-      }
   }
 
   ngOnInit() {

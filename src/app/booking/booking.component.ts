@@ -41,12 +41,12 @@ export class BookingComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.bookingDatabase = new BookingsService(this._httpClient);
-    this.username = GlobalConstants.username;
+    this.username = this.bookingDatabase.getUserName();
     //We can also recieve from parameters
     // this.subscription = this.route.queryParams.subscribe(params => {
     //   this.username = params["username"];
     // })
-    if (this.username == '') {
+    if (!this.username || this.username == '') {
       this.router.navigate(['']);
     }
   }

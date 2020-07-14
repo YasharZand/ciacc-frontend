@@ -24,9 +24,9 @@ export class HomeComponent implements OnInit {
   }
 
   saveUser = () => {
-    GlobalConstants.username = this.emailFormControl.value;
+
     //we can also save it in local storage or backend
-    // this.bookingService.setUserName(this.emailFormControl.value);
+    this.bookingService.setUserName(this.emailFormControl.value);
     this.isUserSaved = true;
   }
 

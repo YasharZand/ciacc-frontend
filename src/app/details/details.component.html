@@ -10,10 +10,17 @@
     <p>
       Your Registered Appointments in the System:
     </p>
-    <mat-list role="list">
+    <mat-list role="list">      
       <mat-list-item *ngFor="let booking of bookings" role="listitem">
-        <div mat-line>{{booking.username}}</div>
-        <div mat-line> {{booking.date | date : 'full'}} </div>
+        <mat-icon matListIcon>calendar_today</mat-icon>
+        <h3 mat-line>{{booking.username}}</h3>
+        <p mat-line> {{booking.date | date : 'medium' : 'UTC'}} </p>
+        <a href="{{booking.calendar}}" target="_blank" mat-icon-button>
+          <mat-icon>add_alarm</mat-icon>
+        </a>
+        <button mat-icon-button>
+          <mat-icon>delete_forever</mat-icon>
+       </button>
       </mat-list-item>
     </mat-list>
 
