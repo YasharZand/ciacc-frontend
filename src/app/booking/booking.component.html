@@ -27,7 +27,7 @@
       <mat-grid-list cols="6" rowHeight="3:1">
         <mat-grid-tile *ngFor="let slot of slots">
           <mat-button-toggle (click)="selectSlot(slot)" [disabled]="!slot.count" mat-raised-button>
-            {{slot.date | date : 'shortTime'}} ({{slot.count}} left)
+            {{slot.date | date : 'shortTime' : '+0:00'}} ({{slot.count}} left)
           </mat-button-toggle>
         </mat-grid-tile>
       </mat-grid-list>
