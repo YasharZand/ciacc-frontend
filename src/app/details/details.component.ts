@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BookingsService } from '../bookings/bookings.service';
-import { GlobalConstants } from '../common/global-constants';
+// import { GlobalConstants } from '../common/global-constants';
 
 @Component({
   selector: 'app-details',
@@ -39,27 +39,22 @@ export class DetailsComponent implements OnInit {
       this.bookings = data.map(booking => {
         let ds = new Date(booking.date);
         let de = new Date(ds.valueOf() + (30 * 60 * 1000));
-        console.log(ds);
-        console.log(ds.toISOString());
+        // console.log(ds.toISOString());
         let st = this.formater(ds);
         let et = this.formater(de);
         booking["calendar"] = "https://calendar.google.com/calendar/r/eventedit?dates="
           + st + "/" + et + "&text=Carsome+Inspection"
-          + "&location=No.+28G,+Jalan+Bandar+Tiga,+Pusat+Bandar+Puchong,+47610+Puchong,+Selangor&details=Please+remember+to+bring+your+documents.&sf=true";
-        console.log(booking["calendar"]);
+          + "&location=No.+28G,+Jalan+Bandar+Tiga,+Pusat+Bandar+Puchong,+47610+Puchong,+Selangor&details=Please+remember+to+bring+your+documents.&ctz=MY&sf=true";
+        // console.log(booking["calendar"]);
         return booking;
       });
     })
   }
 
   formater = (dt : Date) => {
-    // const formatter = new Intl.DateTimeFormat('my',{
-    //   year: 'numeric', month: '2-digit', day: '2-digit',
-    //   hour: '2-digit', minute: '2-digit', second: '2-digit'
-    // });
-    // var parts = formatter.formatToParts(dt);
-    // return parts[4].value+parts[0].value+parts[2].value+"T"+parts[6].value+parts[8].value+parts[10].value+"Z";
-    return dt.toUTCString().replace(/-/g,'').replace(/:/g,'').split(".")[0]+"Z";
+
+    return dt.toISOString().replace(/-|:|\.\d\d\d/g, "");
+    // return dt.toISOString().replace(/-/g,'').replace(/:/g,'').split(".")[0]+"Z";
   }
 
 }

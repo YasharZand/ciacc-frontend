@@ -4,6 +4,7 @@
 The frontend to the Carsome Code challenge.
 You can find the backend at [Carsome Backend](https://github.com/YasharZand/ciacc-backend).
 You register your email, find a date and set an appointment. 
+To see a live view follow this link: [Live on Netlify](https://ciacc-frontend.netlify.app)
 You can change the api backend location at /common/global-constants.ts
 # CiaccFrontend
 
